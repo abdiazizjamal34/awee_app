@@ -38,4 +38,31 @@ class ProductSerice {
       };
     }
   }
+
+  Future<Map<String, dynamic>> updateProduct(
+    String id,
+    Map<String, dynamic> data,
+  ) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/products/$id'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      return {'success': true, 'message': 'Product updated'};
+    } else {
+      return {'success': false, 'message': 'Update failed'};
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteProduct(String id) async {
+    final response = await http.delete(Uri.parse('$baseUrl/products/$id'));
+
+    if (response.statusCode == 200) {
+      return {'success': true, 'message': 'Product deleted'};
+    } else {
+      return {'success': false, 'message': 'Delete failed'};
+    }
+  }
 }

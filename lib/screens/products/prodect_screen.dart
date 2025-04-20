@@ -25,8 +25,7 @@ class _Product_ScreenState extends State<Product_Screen> {
   }
 
   void addProduct() async {
-    setState(() => isLoading = true); // Set isLoading to true when starting
-
+    setState(() => isLoading = true);
     final result = await ProductSerice().addProduct({
       "name": _nameController.text,
       "sku": _idController.text,
@@ -36,7 +35,7 @@ class _Product_ScreenState extends State<Product_Screen> {
       "category": _categoryController.text,
     });
 
-    setState(() => isLoading = false); // Set isLoading to false when done
+    setState(() => isLoading = false);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -46,12 +45,11 @@ class _Product_ScreenState extends State<Product_Screen> {
     );
 
     if (result['success']) {
-      Navigator.pop(context); // Go back to the product list
+      Navigator.pop(context);
     }
   }
 
   void _addProducts() {
-    // Handle product submission
     showDialog(
       context: context,
       builder: (context) {
@@ -93,17 +91,13 @@ class _Product_ScreenState extends State<Product_Screen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // IconButton(
-                //   icon: const Icon(Icons.plus_one_rounded),
-                //   onPressed: _addProducts,
-                // ),
                 ElevatedButton(
                   onPressed: _addProducts,
                   child: Text('Add Product'),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(width: 80),
             Expanded(
               child: FutureBuilder<List<Product>>(
                 future: futureProducts,
@@ -118,45 +112,99 @@ class _Product_ScreenState extends State<Product_Screen> {
 
                   final products = snapshot.data!;
 
-                  return ListView.builder(
+                  SizedBox(height: 80);
+
+                  return ListView.separated(
                     itemCount: products.length,
+                    separatorBuilder:
+                        (context, index) => const SizedBox(height: 16),
                     itemBuilder: (context, index) {
                       final p = products[index];
-                      return ListTile(
-                        title: Text(
-                          p.name,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
                         ),
-                        subtitle: Text(
-                          "Stock: ${p.stock} | Price: \$${p.Price}",
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 112, 127, 156),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        trailing: Text(p.category),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              p.name,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "Stock: ${p.stock} | Price: \$${p.Price}",
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton.icon(
+                                  onPressed: () {
+                                    // TODO: Fill the text fields with p values for editing
+                                    _nameController.text = p.name;
+                                    _idController.text = p.sku;
+                                    _priceController.text = p.Price.toString();
+                                    _stockController.text = p.stock.toString();
+                                    _categoryController.text = p.category;
+                                    _descriptionController.text = p.description;
+                                    _addProducts(); // opens the dialog prefilled for update
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: Colors.yellow,
+                                  ),
+                                  label: const Text(
+                                    'Edit',
+                                    style: TextStyle(color: Colors.yellow),
+                                  ),
+                                ),
+                                TextButton.icon(
+                                  onPressed: () async {
+                                    final result = await ProductSerice()
+                                        .deleteProduct(p.id);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(result['message']),
+                                        backgroundColor:
+                                            result['success']
+                                                ? Colors.green
+                                                : Colors.red,
+                                      ),
+                                    );
+                                    setState(() {
+                                      futureProducts =
+                                          ProductSerice()
+                                              .fetchProducts(); // refresh
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.redAccent,
+                                  ),
+                                  label: const Text(
+                                    'Delete',
+                                    style: TextStyle(color: Colors.redAccent),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       );
                     },
                   );
-
-                  // return ListView.builder(
-                  //   itemCount: products.length,
-                  //   itemBuilder: (context, index) {
-                  //     final p = products[index];
-                  //     return ListTile(
-                  //       title: Text(
-                  //         p.name,
-                  //         style: TextStyle(
-                  //           fontSize: 20,
-                  //           fontWeight: FontWeight.bold,
-                  //           color: Colors.white,
-                  //         ),
-                  //       ),
-                  //       subtitle: Text("Stock: ${p.stock} | Price: \$${p.Price}"),
-                  //       trailing: Text(p.category),
-                  //     );
-                  //   },
-                  // );
                 },
               ),
             ),
