@@ -4,9 +4,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   // final String baseUrl = "http://10.0.2.2:5000/api"; // For Android Emulator
-  final String baseUrl = "http://localhost:5000/api";
-
+  // final String baseUrl = "http://localhost:5000/api";
   // For web Simulator
+  final String baseUrl =
+      "http://192.168.43.247:5000/api"; // For Android adB connected
+
   // late final SharedPreferences prefs;
 
   // AuthService() {

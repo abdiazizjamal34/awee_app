@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(height: 50),
-            Image.asset('assets/welcome.png'),
+            Image.asset('assets/login.png'),
             Text(
               'Welcome back!',
               style: TextStyle(fontSize: 24, color: Colors.white),
