@@ -6,8 +6,9 @@ class AuthService {
   // final String baseUrl = "http://10.0.2.2:5000/api"; // For Android Emulator
   // final String baseUrl = "http://localhost:5000/api";
   // For web Simulator
-  final String baseUrl =
-      "http://192.168.43.247:5000/api"; // For Android adB connected
+  // final String baseUrl =
+  //     "http://192.168.43.247:5000/api"; // For Android adB connected
+  final String baseUrl = "http://192.168.10.102:5000/api";
 
   // late final SharedPreferences prefs;
 
@@ -32,6 +33,10 @@ class AuthService {
       // Save token
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', data['token']);
+      await prefs.setString('name', data['name']);
+      await prefs.setString('email', data['email']);
+      await prefs.setString('phone', data['phone']);
+      await prefs.setString('role', data['role']);
 
       return {'success': true, 'user': data};
     } else {

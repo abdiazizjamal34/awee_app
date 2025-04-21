@@ -1,4 +1,5 @@
 import 'package:awee/screens/products/prodect_screen.dart';
+import 'package:awee/screens/profile/profilr.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -9,31 +10,19 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashbordScreenState extends State<DashboardScreen> {
+  String name = "John Doe";
+  String email = "johan@gmail.com";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Dashboard')),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Welcome back!',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.notifications),
-                    onPressed: () {
-                      // Handle notification action
-                    },
-                  ),
-                ],
-              ),
+              profile(name, email),
 
               const SizedBox(height: 20),
 
@@ -51,7 +40,7 @@ class _DashbordScreenState extends State<DashboardScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Product_Screen(),
+                          builder: (context) => ProductScreen(),
                         ),
                       );
                     },

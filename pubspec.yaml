@@ -19,6 +19,7 @@ dependencies:
   intl: ^0.18.1
   provider: ^6.1.2
   dio: ^5.2.0
+  shimmer: ^3.0.0
   
   
   cupertino_icons: ^1.0.8

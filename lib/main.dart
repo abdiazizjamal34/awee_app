@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/auth/login_secreen.dart';
+import 'package:awee/screens/products/prodect_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -105,6 +106,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: LoginScreen(),
+      // home: ProductScreen(),
     );
   }
 }
