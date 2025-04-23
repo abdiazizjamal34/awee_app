@@ -1,14 +1,54 @@
+// import 'package:awee/screens/comingson/comingSon.dart';
+// import 'package:awee/screens/dashbord/dashbord_screen.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'screens/auth/login_secreen.dart';
-import 'package:awee/screens/products/prodect_screen.dart';
+// import 'package:awee/screens/products/prodect_screen.dart';
 
 void main() {
+  AwesomeNotifications().initialize(
+    null, // icon for Android notification (set later if needed)
+    [
+      NotificationChannel(
+        channelKey: 'basic_channel',
+        channelName: 'Basic Notifications',
+        channelDescription: 'Notification for welcome back message',
+        defaultColor: Colors.teal,
+        importance: NotificationImportance.High,
+        channelShowBadge: true,
+      ),
+    ],
+  );
   runApp(MyApp());
 }
 
 // const mixedColor = Color.lerp(Colors.redAccent, Colors.purple, 0.5)
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  //   void showNotification() async {
+  //   const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  //       AndroidNotificationDetails(
+  //     'your_channel_id',
+  //     'your_channel_name',
+  //     channelDescription: 'your_channel_description',
+  //     importance: Importance.max,
+  //     priority: Priority.high,
+  //   );
+
+  //   const NotificationDetails platformChannelSpecifics =
+  //       NotificationDetails(android: androidPlatformChannelSpecifics);
+
+  //   await flutterLocalNotificationsPlugin.show(
+  //     0, // Notification ID
+  //     'Hello 👋',
+  //     'This is a local notification!',
+  //     platformChannelSpecifics,
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -107,6 +147,8 @@ class MyApp extends StatelessWidget {
       ),
       home: LoginScreen(),
       // home: ProductScreen(),
+      // home: comingSoon(),
+      // home: DashboardScreen(),
     );
   }
 }

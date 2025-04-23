@@ -1,8 +1,12 @@
+import 'package:awee/main.dart';
 import 'package:awee/screens/dashbord/dashbord_screen.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:awee/Services/auth_services.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -16,6 +20,11 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = passwordController.text;
 
     final result = await AuthService().login(email, password);
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
 
     if (result['success']) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -50,8 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 50),
-            Image.asset('assets/login.png'),
+            SizedBox(height: 30),
+            Image.asset('assets/login.png', width: 200, height: 200),
             Text(
               'Welcome back!',
               style: TextStyle(fontSize: 24, color: Colors.white),
@@ -79,12 +88,12 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: login,
-              child: Text('Login'),
               style: ElevatedButton.styleFrom(
                 foregroundColor: const Color.fromARGB(255, 255, 255, 255),
                 backgroundColor: Color.fromARGB(255, 182, 108, 192),
                 padding: EdgeInsets.symmetric(horizontal: 102, vertical: 26),
               ),
+              child: Text('Login'),
             ),
           ],
         ),

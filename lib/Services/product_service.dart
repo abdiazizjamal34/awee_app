@@ -6,7 +6,7 @@ import 'package:awee/models/product.dart';
 class ProductSerice {
   // final String baseUrl = 'http://localhost:5000/api/products';
   final String baseUrl =
-      'http://192.168.10.102:5000/api/products'; // For web Simulator
+      'http://192.168.10.104:5000/api/products'; // For web Simulator
 
   Future<List<Product>> fetchProducts() async {
     final response = await http.get(Uri.parse(baseUrl));

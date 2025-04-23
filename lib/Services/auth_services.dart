@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,7 +9,7 @@ class AuthService {
   // For web Simulator
   // final String baseUrl =
   //     "http://192.168.43.247:5000/api"; // For Android adB connected
-  // final String baseUrl = "http://192.168.10.102:5000/api";
+  // final String baseUrl = "http://192.168.10.104:5000/api";
 
   // late final SharedPreferences prefs;
 
@@ -29,6 +30,15 @@ class AuthService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
+      AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 1,
+          channelKey: 'basic_channel',
+          title: '👋 Welcome back!',
+          body: 'Glad to see you again!',
+          notificationLayout: NotificationLayout.Default,
+        ),
+      );
 
       // Save token
       final prefs = await SharedPreferences.getInstance();

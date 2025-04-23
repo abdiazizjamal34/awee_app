@@ -6,18 +6,17 @@ Widget profile(name, email) {
 
     children: [
       Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.fromLTRB(30, 0, 60, 0),
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 112, 127, 156),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Column(
           children: [
-            const SizedBox(height: 16),
+            const SizedBox(height: 6),
             Row(
               children: [
-                const SizedBox(width: 26),
-
+                // const SizedBox(width: 6),
                 CircleAvatar(
                   radius: 40,
                   backgroundImage: Image.asset('assets/avater.png').image,
@@ -34,7 +33,7 @@ Widget profile(name, email) {
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: 76),
                     Text(
                       '$email',
                       style: const TextStyle(fontSize: 16, color: Colors.white),
