@@ -1,8 +1,8 @@
 // import 'package:awee/screens/comingson/comingSon.dart';
 // import 'package:awee/screens/dashbord/dashbord_screen.dart';
+import 'package:awee/screens/dashbord/presentation/dashboard_screens.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'screens/auth/login_secreen.dart';
 // import 'package:awee/screens/products/prodect_screen.dart';
 
@@ -145,10 +145,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: LoginScreen(),
+      // home: LoginScreen(),
       // home: ProductScreen(),
       // home: comingSoon(),
-      // home: DashboardScreen(),
+      home: DashboardScreen(),
     );
   }
 }
