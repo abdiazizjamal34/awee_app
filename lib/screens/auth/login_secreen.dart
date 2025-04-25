@@ -1,5 +1,6 @@
 import 'package:awee/main.dart';
 import 'package:awee/screens/dashbord/dashbord_screen.dart';
+import 'package:awee/screens/dashbord/presentation/dashboard_screens.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:awee/Services/auth_services.dart';
@@ -38,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (result['success']) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const DashboardScreen()),
+          MaterialPageRoute(builder: (_) => const DashboardScreens()),
         );
       }
 
@@ -60,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(height: 30),
-            Image.asset('assets/login.png', width: 200, height: 200),
+            Image.asset('assets/login.png', width: 800, height: 300),
             Text(
               'Welcome back!',
               style: TextStyle(fontSize: 24, color: Colors.white),

@@ -37,6 +37,9 @@ class _DashbordScreenState extends State<DashboardScreen> {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
+          keyboardDismissBehavior:
+              ScrollViewKeyboardDismissBehavior.onDrag, // Correct usage
+
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
