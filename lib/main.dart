@@ -2,25 +2,25 @@
 // import 'package:awee/screens/dashbord/dashbord_screen.dart';
 import 'package:awee/screens/auth/presentation/bloc/login_screen.dart';
 import 'package:awee/screens/dashbord/presentation/dashboard_screens.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awee/screens/products/prodect_screen.dart';
 import 'package:flutter/material.dart';
 // import 'screens/auth/login_secreen.dart';
 // import 'package:awee/screens/products/prodect_screen.dart';
 
 void main() {
-  AwesomeNotifications().initialize(
-    null, // icon for Android notification (set later if needed)
-    [
-      NotificationChannel(
-        channelKey: 'basic_channel',
-        channelName: 'Basic Notifications',
-        channelDescription: 'Notification for welcome back message',
-        defaultColor: Colors.teal,
-        importance: NotificationImportance.High,
-        channelShowBadge: true,
-      ),
-    ],
-  );
+  // AwesomeNotifications().initialize(
+  //   null, // icon for Android notification (set later if needed)
+  //   [
+  //     NotificationChannel(
+  //       channelKey: 'basic_channel',
+  //       channelName: 'Basic Notifications',
+  //       channelDescription: 'Notification for welcome back message',
+  //       defaultColor: Colors.teal,
+  //       importance: NotificationImportance.High,
+  //       channelShowBadge: true,
+  //     ),
+  //   ],
+  // );
   runApp(MyApp());
 }
 

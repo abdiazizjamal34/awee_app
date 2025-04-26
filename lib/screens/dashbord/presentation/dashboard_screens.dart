@@ -40,6 +40,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
+  // void _fetchDashboard() {
+  //   context.read<DashboardBloc>().add(FetchDashboard());
+  // }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -48,170 +52,259 @@ class _DashboardScreenState extends State<DashboardScreen> {
               DashboardBloc(DashboardUseCase(DashboardRepository()))
                 ..add(FetchDashboard()),
       child: Scaffold(
-        body: RefreshIndicator(
-          onRefresh: () async {
-            context.read<DashboardBloc>().add(FetchDashboard());
-          },
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 40),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
 
-                profile(name, email),
+              profile(name, email),
 
-                const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-                GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    buildGridItem(
-                      title: "Products",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ProductScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    buildGridItem(
-                      title: "Orders",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ComingSoonScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    buildGridItem(
-                      title: "Sales",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ComingSoonScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    buildGridItem(
-                      title: "Customers",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ComingSoonScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 40),
-
-                BlocBuilder<DashboardBloc, DashboardState>(
-                  builder: (context, state) {
-                    if (state is DashboardLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is DashboardLoaded) {
-                      return Column(
-                        children: [
-                          buildSummaryCard(
-                            '📦 Total Products',
-                            state.dashboard.totalProducts.toString(),
-                          ),
-                          const SizedBox(height: 16),
-                          buildSummaryCard(
-                            '📈 Total Stock',
-                            state.dashboard.totalStock.toString(),
-                          ),
-                          const SizedBox(height: 16),
-                          buildSummaryCard(
-                            '💵 Total Value',
-                            "\$${state.dashboard.totalValue.toStringAsFixed(2)}",
-                          ),
-                          const SizedBox(height: 20),
-                          const Text(
-                            'Visual Chart:',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          SizedBox(height: 200, child: DashboardBarChart()),
-                        ],
+              GridView.count(
+                crossAxisCount: 2,
+                crossAxisSpacing: 40,
+                mainAxisSpacing: 10,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  buildGridItem(
+                    title: "Products",
+                    image: 'assets/products.png',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProductScreen(),
+                        ),
                       );
-                    } else if (state is DashboardError) {
-                      return Center(child: Text('Error: ${state.message}'));
-                    }
-                    return const SizedBox();
-                  },
+                    },
+                  ),
+                  buildGridItem(
+                    title: "Orders",
+                    image: 'assets/orders.png',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ComingSoonScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  buildGridItem(
+                    title: "Sales",
+                    image: 'assets/sales.png',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ComingSoonScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  buildGridItem(
+                    title: "Customers",
+                    image: 'assets/customers.png',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ComingSoonScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 40),
+
+                      // profile(name, email),
+                      const SizedBox(height: 20),
+
+                      // GridView.count(
+                      //   crossAxisCount: 2,
+                      //   crossAxisSpacing: 20,
+                      //   mainAxisSpacing: 20,
+                      //   shrinkWrap: true,
+                      //   physics: const NeverScrollableScrollPhysics(),
+                      //   children: [
+                      //     buildGridItem(
+                      //       title: "Products",
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (context) => const ProductScreen(),
+                      //           ),
+                      //         );
+                      //       },
+                      //     ),
+                      //     buildGridItem(
+                      //       title: "Orders",
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder:
+                      //                 (context) => const ComingSoonScreen(),
+                      //           ),
+                      //         );
+                      //       },
+                      //     ),
+                      //     buildGridItem(
+                      //       title: "Sales",
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder:
+                      //                 (context) => const ComingSoonScreen(),
+                      //           ),
+                      //         );
+                      //       },
+                      //     ),
+                      //     buildGridItem(
+                      //       title: "Customers",
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder:
+                      //                 (context) => const ComingSoonScreen(),
+                      //           ),
+                      //         );
+                      //       },
+                      //     ),
+                      //   ],
+                      // ),
+                      const SizedBox(height: 40),
+
+                      BlocBuilder<DashboardBloc, DashboardState>(
+                        builder: (context, state) {
+                          if (state is DashboardLoading) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (state is DashboardLoaded) {
+                            /// refersh to the data from the API
+                            return RefreshIndicator(
+                              onRefresh: () async {
+                                context.read<DashboardBloc>().add(
+                                  FetchDashboard(),
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  buildSummaryCard(
+                                    '📦 Total Products',
+                                    state.dashboard.totalProducts.toString(),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  buildSummaryCard(
+                                    '📈 Total Stock',
+                                    state.dashboard.totalStock.toString(),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  buildSummaryCard(
+                                    '💵 Total Value',
+                                    "\$${state.dashboard.totalValue.toStringAsFixed(2)}",
+                                  ),
+                                  const SizedBox(height: 20),
+                                  const Text(
+                                    'Visual Chart:',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  SizedBox(
+                                    height: 200,
+                                    child: DashboardBarChart(),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else if (state is DashboardLoading) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (state is DashboardError) {
+                            return Center(
+                              child: Text('Error: ${state.message}'),
+                            );
+                          }
+                          return const SizedBox();
+                        },
+                      ),
+
+                      const SizedBox(height: 30),
+
+                      // GridView.count(
+                      //   crossAxisCount: 2,
+                      //   crossAxisSpacing: 20,
+                      //   mainAxisSpacing: 20,
+                      //   shrinkWrap: true,
+                      //   physics: const NeverScrollableScrollPhysics(),
+                      //   children: [
+                      //     buildGridItem(
+                      //       title: "Products",
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (context) => const ProductScreen(),
+                      //           ),
+                      //         );
+                      //       },
+                      //     ),
+                      //     buildGridItem(
+                      //       title: "Orders",
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (context) => const ComingSoonScreen(),
+                      //           ),
+                      //         );
+                      //       },
+                      //     ),
+                      //     buildGridItem(
+                      //       title: "Sales",
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (context) => const ComingSoonScreen(),
+                      //           ),
+                      //         );
+                      //       },
+                      //     ),
+                      //     buildGridItem(
+                      //       title: "Customers",
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (context) => const ComingSoonScreen(),
+                      //           ),
+                      //         );
+                      //       },
+                      //     ),
+                      //   ],
+                      // ),
+                    ],
+                  ),
                 ),
-
-                const SizedBox(height: 30),
-
-                // GridView.count(
-                //   crossAxisCount: 2,
-                //   crossAxisSpacing: 20,
-                //   mainAxisSpacing: 20,
-                //   shrinkWrap: true,
-                //   physics: const NeverScrollableScrollPhysics(),
-                //   children: [
-                //     buildGridItem(
-                //       title: "Products",
-                //       onTap: () {
-                //         Navigator.push(
-                //           context,
-                //           MaterialPageRoute(
-                //             builder: (context) => const ProductScreen(),
-                //           ),
-                //         );
-                //       },
-                //     ),
-                //     buildGridItem(
-                //       title: "Orders",
-                //       onTap: () {
-                //         Navigator.push(
-                //           context,
-                //           MaterialPageRoute(
-                //             builder: (context) => const ComingSoonScreen(),
-                //           ),
-                //         );
-                //       },
-                //     ),
-                //     buildGridItem(
-                //       title: "Sales",
-                //       onTap: () {
-                //         Navigator.push(
-                //           context,
-                //           MaterialPageRoute(
-                //             builder: (context) => const ComingSoonScreen(),
-                //           ),
-                //         );
-                //       },
-                //     ),
-                //     buildGridItem(
-                //       title: "Customers",
-                //       onTap: () {
-                //         Navigator.push(
-                //           context,
-                //           MaterialPageRoute(
-                //             builder: (context) => const ComingSoonScreen(),
-                //           ),
-                //         );
-                //       },
-                //     ),
-                //   ],
-                // ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -232,14 +325,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget buildGridItem({required String title, required VoidCallback onTap}) {
+  Widget buildGridItem({
+    required String title,
+    required VoidCallback onTap,
+    required String image,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 100,
+        height: 50,
+        width: 50,
         decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(10),
+          image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
+          color: const Color.fromARGB(255, 24, 40, 65),
+          borderRadius: BorderRadius.circular(30),
         ),
         child: Center(
           child: Text(

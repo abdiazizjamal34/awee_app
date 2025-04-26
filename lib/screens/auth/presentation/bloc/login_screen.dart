@@ -5,9 +5,10 @@ import 'package:awee/screens/auth/presentation/bloc/auth_event.dart';
 import 'package:awee/screens/auth/presentation/bloc/auth_state.dart';
 import 'package:awee/screens/dashbord/dashbord_screen.dart';
 import 'package:awee/screens/dashbord/presentation/dashboard_screens.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lottie/lottie.dart'; // ➡️ for animated loader
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,28 +18,84 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  void _checkNotificationPermission() async {
-    final isAllowed = await AwesomeNotifications().isNotificationAllowed();
-    if (!isAllowed) {
-      AwesomeNotifications().requestPermissionToSendNotifications();
-    }
-  }
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool rememberMe = false;
 
   @override
   void initState() {
     super.initState();
-    _checkNotificationPermission();
+    // _checkNotificationPermission();
+    _loadSavedCredentials();
+  }
+
+  // void _checkNotificationPermission() async {
+  //   // final isAllowed = await AwesomeNotifications().isNotificationAllowed();
+  //   if (!isAllowed) {
+  //     // AwesomeNotifications().requestPermissionToSendNotifications();
+  //   }
+  // }
+
+  void _loadSavedCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('saved_email') &&
+        prefs.containsKey('saved_password')) {
+      setState(() {
+        _emailController.text = prefs.getString('saved_email') ?? '';
+        _passwordController.text = prefs.getString('saved_password') ?? '';
+        rememberMe = true;
+      });
+    }
+  }
+
+  void _saveCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (rememberMe) {
+      await prefs.setString('saved_email', _emailController.text.trim());
+      await prefs.setString('saved_password', _passwordController.text);
+    } else {
+      await prefs.remove('saved_email');
+      await prefs.remove('saved_password');
+    }
   }
 
   void _login(BuildContext context) {
-    context.read<AuthBloc>().add(
-      LoginButtonPressed(
-        email: emailController.text.trim(),
-        password: passwordController.text,
+    if (_formKey.currentState!.validate()) {
+      _saveCredentials();
+      context.read<AuthBloc>().add(
+        LoginButtonPressed(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        ),
+      );
+    }
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) return 'Email is required';
+    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value))
+      return 'Enter a valid email';
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) return 'Password is required';
+    if (value.length < 6) return 'Password must be at least 6 characters';
+    return null;
+  }
+
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: Colors.black),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.blue, width: 2),
+        borderRadius: BorderRadius.circular(12),
       ),
+      filled: true,
+      fillColor: const Color.fromARGB(255, 0, 0, 0),
     );
   }
 
@@ -50,14 +107,14 @@ class _LoginScreenState extends State<LoginScreen> {
         body: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthAuthenticated) {
-              AwesomeNotifications().createNotification(
-                content: NotificationContent(
-                  id: 1,
-                  channelKey: 'basic_channel',
-                  title: 'Welcome back!',
-                  body: 'You have successfully logged in.',
-                ),
-              );
+              // AwesomeNotifications().createNotification(
+              //   content: NotificationContent(
+              //     id: 1,
+              //     channelKey: 'basic_channel',
+              //     title: 'Welcome back!',
+              //     body: 'You have successfully logged in.',
+              //   ),
+              // );
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (_) => const DashboardScreen()),
@@ -77,58 +134,84 @@ class _LoginScreenState extends State<LoginScreen> {
               child: SingleChildScrollView(
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 30),
-                    Image.asset('assets/login.png', width: 800, height: 300),
-                    const Text(
-                      'Welcome back!',
-                      style: TextStyle(fontSize: 24, color: Colors.black),
-                    ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      controller: emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        labelStyle: TextStyle(color: Colors.black),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                        labelStyle: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed:
-                          state is AuthLoading ? null : () => _login(context),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: const Color.fromARGB(
-                          255,
-                          182,
-                          108,
-                          192,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 100,
-                          vertical: 20,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 30),
+                      Image.asset('assets/login.png', width: 800, height: 300),
+                      const Text(
+                        'Welcome back!',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Color.fromARGB(255, 255, 255, 255),
                         ),
                       ),
-                      child:
-                          state is AuthLoading
-                              ? const CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                              : const Text('Login'),
-                    ),
-                  ],
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _emailController,
+                        validator: _validateEmail,
+                        decoration: _inputDecoration('Email'),
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _passwordController,
+                        validator: _validatePassword,
+                        obscureText: true,
+                        decoration: _inputDecoration('Password'),
+                      ),
+                      const SizedBox(height: 10),
+                      CheckboxListTile(
+                        title: const Text(
+                          'Remember Me',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                          ),
+                        ),
+                        value: rememberMe,
+                        onChanged: (value) {
+                          setState(() {
+                            rememberMe = value ?? false;
+                          });
+                        },
+                        controlAffinity: ListTileControlAffinity.leading,
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed:
+                            state is AuthLoading ? null : () => _login(context),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: const Color.fromARGB(
+                            255,
+                            182,
+                            108,
+                            192,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 100,
+                            vertical: 20,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 5,
+                        ),
+                        child:
+                            state is AuthLoading
+                                ? SizedBox(
+                                  height: 90,
+                                  width: 80,
+                                  child: Lottie.asset(
+                                    'assets/rocket.json',
+                                  ), // 🔥 Animated Loader
+                                )
+                                : const Text('Login'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

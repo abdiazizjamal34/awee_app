@@ -39,14 +39,14 @@ dependencies:
   dio: ^5.2.0
   shimmer: ^3.0.0
   lottie: ^2.3.2
-  flutter_local_notifications: ^15.1.1
+  # flutter_local_notifications: ^15.1.1
   fl_chart: ^0.71.0
 
 
-  awesome_notifications:
-    git:
-      url: https://github.com/rafaelsetragni/awesome_notifications.git
-      ref: development
+  # awesome_notifications:
+  #   git:
+  #     url: https://github.com/rafaelsetragni/awesome_notifications.git
+  #     ref: development
 
   cupertino_icons: ^1.0.8
   # flutter_localizations:

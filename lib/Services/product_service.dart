@@ -4,11 +4,11 @@ import 'package:http/http.dart' as http;
 import 'package:awee/models/product.dart';
 
 class ProductSerice {
-  final String baseUrl =
-      'http://localhost:5000/api/products'; // For web Simulator
-
   // final String baseUrl =
-  //     'http://192.168.10.104:5000/api/products'; // For web Simulator
+  //     'http://localhost:5000/api/products'; // For web Simulator
+
+  final String baseUrl =
+      'http://192.168.10.107:5000/api/products'; // For web Simulator
 
   Future<List<Product>> fetchProducts() async {
     final response = await http.get(Uri.parse(baseUrl));
