@@ -1,4 +1,7 @@
-import 'package:awee/screens/dashbord/dashbord_screen.dart';
+import 'package:awee/order_mngmnt/data/order_repository.dart';
+import 'package:awee/order_mngmnt/presentation/bloc/order_bloc.dart';
+import 'package:awee/order_mngmnt/presentation/bloc/order_event.dart';
+import 'package:awee/order_mngmnt/presentation/order_screen.dart';
 import 'package:awee/screens/dashbord/data/dashboard_repository.dart';
 import 'package:awee/screens/dashbord/domain/dashboard_useCase.dart';
 import 'package:awee/screens/dashbord/presentation/bloc/dashboard_bloc.dart';
@@ -64,7 +67,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
               GridView.count(
                 crossAxisCount: 2,
-                crossAxisSpacing: 40,
+                crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -85,10 +88,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     title: "Orders",
                     image: 'assets/orders.png',
                     onTap: () {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder:
+                      //         (context) => BlocProvider.value(
+                      //           value: BlocProvider.of<OrderBloc>(context),
+                      //           child: const OrderListScreen(),
+                      //         ),
+                      //   ),
+                      // );
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ComingSoonScreen(),
+                          builder:
+                              (context) => BlocProvider(
+                                create:
+                                    (_) =>
+                                        OrderBloc(OrderRepository())
+                                          ..add(FetchOrders()),
+                                child: const OrderListScreen(),
+                              ),
                         ),
                       );
                     },
@@ -144,12 +165,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       //       onTap: () {
                       //         Navigator.push(
                       //           context,
+
                       //           MaterialPageRoute(
                       //             builder: (context) => const ProductScreen(),
                       //           ),
                       //         );
                       //       },
                       //     ),
+
                       //     buildGridItem(
                       //       title: "Orders",
                       //       onTap: () {
@@ -333,16 +356,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 50,
-        width: 50,
+        height: 2,
+        width: 2,
         decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
           color: const Color.fromARGB(255, 24, 40, 65),
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(50),
         ),
         child: Center(
           child: Text(
             title,
+            textAlign: TextAlign.justify,
             style: const TextStyle(color: Colors.white, fontSize: 20),
           ),
         ),
