@@ -117,6 +117,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 40),
 
                 BlocBuilder<DashboardBloc, DashboardState>(
                   builder: (context, state) {
