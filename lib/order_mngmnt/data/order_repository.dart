@@ -1,11 +1,9 @@
 import 'dart:convert';
+import 'package:awee/constants/api.dart';
 import 'package:awee/order_mngmnt/model/order.dart';
 import 'package:http/http.dart' as http;
 
 class OrderRepository {
-  final String baseUrl = "http://192.168.10.107:5000/api";
-  // final String baseUrl = "http://localhost:5000/api";
-
   Future<List<Order>> fetchOrders({String? status}) async {
     String url = '$baseUrl/orders';
 

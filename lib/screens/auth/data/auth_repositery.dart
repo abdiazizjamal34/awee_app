@@ -1,12 +1,10 @@
 import 'dart:convert';
+import 'package:awee/constants/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../domain/user_entity.dart';
 
 class AuthRepository {
-  final String baseUrl = "http://192.168.10.107:5000/api";
-  // final String baseUrl = "http://localhost:5000/api";
-
   Future<UserEntity> login(String email, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/auth/login'),

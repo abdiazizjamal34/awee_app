@@ -1,17 +1,12 @@
 import 'dart:convert';
+import 'package:awee/constants/api.dart';
 import 'package:http/http.dart' as http;
 // import 'package:flutter/material.dart';
 import 'package:awee/models/product.dart';
 
 class ProductSerice {
-  // final String baseUrl =
-  //     'http://localhost:5000/api/products'; // For web Simulator
-
-  final String baseUrl =
-      'http://192.168.10.107:5000/api/products'; // For web Simulator
-
   Future<List<Product>> fetchProducts() async {
-    final response = await http.get(Uri.parse(baseUrl));
+    final response = await http.get(Uri.parse("$baseUrl/products"));
 
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = json.decode(response.body);
@@ -48,7 +43,7 @@ class ProductSerice {
     Map<String, dynamic> productData,
   ) async {
     final response = await http.put(
-      Uri.parse('$baseUrl/$id'),
+      Uri.parse('$baseUrl/products/$id'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(productData),
     );
