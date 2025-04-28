@@ -1,4 +1,4 @@
-import 'package:awee/order_mngmnt/model/order.dart';
+import 'package:awee/screens/order_mngmnt/model/order.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class OrderState extends Equatable {

@@ -1,12 +1,13 @@
-import 'package:awee/order_mngmnt/data/order_repository.dart';
-import 'package:awee/order_mngmnt/presentation/bloc/order_bloc.dart';
-import 'package:awee/order_mngmnt/presentation/bloc/order_event.dart';
-import 'package:awee/order_mngmnt/presentation/order_screen.dart';
+import 'package:awee/screens/order_mngmnt/data/order_repository.dart';
+import 'package:awee/screens/order_mngmnt/presentation/bloc/order_bloc.dart';
+import 'package:awee/screens/order_mngmnt/presentation/bloc/order_event.dart';
+import 'package:awee/screens/order_mngmnt/presentation/order_screen.dart';
 import 'package:awee/screens/dashbord/data/dashboard_repository.dart';
 import 'package:awee/screens/dashbord/domain/dashboard_useCase.dart';
 import 'package:awee/screens/dashbord/presentation/bloc/dashboard_bloc.dart';
 import 'package:awee/screens/dashbord/presentation/bloc/dashboard_event.dart';
 import 'package:awee/screens/dashbord/presentation/bloc/dhashboard_state.dart';
+import 'package:awee/screens/sales/presentation/report_screen.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -121,7 +122,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ComingSoonScreen(),
+                          builder: (context) => const ReportScreen(),
                         ),
                       );
                     },

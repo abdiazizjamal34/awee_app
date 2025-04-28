@@ -1,6 +1,6 @@
 import 'package:awee/screens/profile/profilr.dart';
 import 'package:flutter/material.dart';
-import 'package:awee/models/product.dart';
+import 'package:awee/screens/products/models/product.dart';
 import 'package:awee/Services/product_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';

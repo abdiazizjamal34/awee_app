@@ -1,7 +1,8 @@
-import 'package:awee/order_mngmnt/model/order.dart';
-import 'package:awee/order_mngmnt/presentation/bloc/order_bloc.dart';
-import 'package:awee/order_mngmnt/presentation/bloc/order_event.dart';
-import 'package:awee/order_mngmnt/presentation/bloc/order_state.dart';
+import 'package:awee/screens/order_mngmnt/model/order.dart';
+import 'package:awee/screens/order_mngmnt/presentation/bloc/order_bloc.dart';
+import 'package:awee/screens/order_mngmnt/presentation/bloc/order_event.dart';
+import 'package:awee/screens/order_mngmnt/presentation/bloc/order_state.dart';
+import 'package:awee/screens/order_mngmnt/presentation/create_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,9 +19,26 @@ class _OrderListScreenState extends State<OrderListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Order Management')),
+      // appBar: AppBar(title: const Text('Order Management')),
       body: Column(
         children: [
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (_) => BlocProvider.value(
+                        value: context.read<OrderBloc>(),
+                        child: CreateOrderScreen(),
+                      ),
+                ),
+              );
+            },
+            child: const Text('Create Order'),
+          ),
+
           const SizedBox(height: 10),
           _buildFilterButtons(),
           const SizedBox(height: 10),
@@ -118,8 +136,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
   }
 
   Widget _buildActionButtons(BuildContext context, Order order) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (order.status == 'Pending') ...[
           ElevatedButton(
