@@ -8,9 +8,11 @@ import 'package:awee/screens/dashbord/presentation/bloc/dashboard_bloc.dart';
 import 'package:awee/screens/dashbord/presentation/bloc/dashboard_event.dart';
 import 'package:awee/screens/dashbord/presentation/bloc/dhashboard_state.dart';
 import 'package:awee/screens/sales/presentation/report_screen.dart';
+import 'package:awee/them/them.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:awee/screens/products/prodect_screen.dart';
@@ -60,6 +62,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
+              SwitchListTile(
+                value:
+                    Provider.of<ThemeProvider>(context).themeMode ==
+                    ThemeMode.dark,
+                title: const Text('Dark Mode'),
+                onChanged: (value) {
+                  Provider.of<ThemeProvider>(
+                    context,
+                    listen: false,
+                  ).toggleTheme(value);
+                },
+              ),
+
               const SizedBox(height: 20),
 
               profile(name, email),

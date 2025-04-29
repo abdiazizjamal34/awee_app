@@ -5,8 +5,10 @@ import 'package:awee/screens/auth/presentation/bloc/auth_event.dart';
 import 'package:awee/screens/auth/presentation/bloc/auth_state.dart';
 import 'package:awee/screens/dashbord/dashbord_screen.dart';
 import 'package:awee/screens/dashbord/presentation/dashboard_screens.dart';
+import 'package:awee/them/them.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lottie/lottie.dart'; // ➡️ for animated loader
 
@@ -85,25 +87,42 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
-  InputDecoration _inputDecoration(String label) {
-    return InputDecoration(
-      labelText: label,
-      labelStyle: const TextStyle(color: Colors.black),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-      focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.blue, width: 2),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      filled: true,
-      fillColor: const Color.fromARGB(255, 0, 0, 0),
-    );
-  }
+  // InputDecoration _inputDecoration(String label) {
+  //   return InputDecoration(
+  //     labelText: label,
+  //     labelStyle: const TextStyle(color: Colors.black),
+  //     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+  //     focusedBorder: OutlineInputBorder(
+  //       borderSide: const BorderSide(color: Colors.blue, width: 2),
+  //       borderRadius: BorderRadius.circular(12),
+  //     ),
+  //     filled: true,
+  //     fillColor: const Color.fromARGB(255, 0, 0, 0),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => AuthBloc(LoginUseCase(AuthRepository())),
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Login'),
+          actions: [
+            SwitchListTile(
+              value:
+                  Provider.of<ThemeProvider>(context).themeMode ==
+                  ThemeMode.dark,
+              title: const Text('Dark Mode'),
+              onChanged: (value) {
+                Provider.of<ThemeProvider>(
+                  context,
+                  listen: false,
+                ).toggleTheme(value);
+              },
+            ),
+          ],
+        ),
         body: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthAuthenticated) {
@@ -149,18 +168,35 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
+
                       TextFormField(
                         controller: _emailController,
                         validator: _validateEmail,
-                        decoration: _inputDecoration('Email'),
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          prefixIcon: Icon(Icons.shopping_bag),
+                        ),
+
                         keyboardType: TextInputType.emailAddress,
                       ),
+
+                      // TextField(
+                      //   controller: _emailController,
+                      //   validator:    _validateEmail
+                      //   decoration: const InputDecoration(
+                      //     labelText: 'Email',
+                      //     prefixIcon: Icon(Icons.shopping_bag),
+                      //   ),
+                      // ),
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: _passwordController,
                         validator: _validatePassword,
                         obscureText: true,
-                        decoration: _inputDecoration('Password'),
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          prefixIcon: Icon(Icons.shopping_bag),
+                        ),
                       ),
                       const SizedBox(height: 10),
                       CheckboxListTile(
