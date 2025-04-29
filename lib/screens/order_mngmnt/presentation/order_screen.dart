@@ -5,6 +5,7 @@ import 'package:awee/screens/order_mngmnt/presentation/bloc/order_state.dart';
 import 'package:awee/screens/order_mngmnt/presentation/create_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 class OrderListScreen extends StatefulWidget {
   const OrderListScreen({super.key});
@@ -46,7 +47,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
             child: BlocBuilder<OrderBloc, OrderState>(
               builder: (context, state) {
                 if (state is OrderLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return buildLoadingShimmer();
                 } else if (state is OrdersLoaded) {
                   final orders = state.orders;
 
@@ -91,9 +92,11 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     },
                   );
                 } else if (state is OrderError) {
-                  return Center(child: Text('Error: ${state.message}'));
+                  return buildErrorRetry(() {
+                    context.read<OrderBloc>().add(FetchOrders());
+                  });
                 } else {
-                  return const Center(child: Text('Unknown state'));
+                  return buildNoData(" No Data Note loaded");
                 }
               },
             ),
@@ -176,4 +179,61 @@ class _OrderListScreenState extends State<OrderListScreen> {
       ],
     );
   }
+}
+
+Widget buildLoadingShimmer() {
+  return ListView.builder(
+    itemCount: 5,
+    itemBuilder: (_, __) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Shimmer.fromColors(
+          baseColor: Colors.grey[800]!,
+          highlightColor: Colors.grey[600]!,
+          child: Container(
+            height: 80,
+            decoration: BoxDecoration(
+              color: Colors.grey[800],
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Widget buildNoData(String message) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.inbox, size: 64, color: Colors.grey),
+        const SizedBox(height: 12),
+        Text(message, style: const TextStyle(color: Colors.white54)),
+      ],
+    ),
+  );
+}
+
+Widget buildErrorRetry(VoidCallback onRetry) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.error_outline, size: 64, color: Colors.redAccent),
+        const SizedBox(height: 8),
+        const Text(
+          "Something went wrong",
+          style: TextStyle(color: Colors.white),
+        ),
+        const SizedBox(height: 12),
+        ElevatedButton.icon(
+          onPressed: onRetry,
+          icon: const Icon(Icons.refresh),
+          label: const Text("Retry"),
+        ),
+      ],
+    ),
+  );
 }

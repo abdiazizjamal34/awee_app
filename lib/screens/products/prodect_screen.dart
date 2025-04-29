@@ -231,12 +231,12 @@ class _ProductScreenState extends State<ProductScreen> {
                               );
                             } else if (snapshot.hasError) {
                               return Center(
-                                child: Text('Error: ${snapshot.error}'),
+                                child: buildErrorRetry(() => _handleRefresh()),
                               );
                             } else if (!snapshot.hasData ||
                                 snapshot.data!.isEmpty) {
-                              return const Center(
-                                child: Text('No products found.'),
+                              return Center(
+                                child: buildNoData("No products found."),
                               );
                             }
 
@@ -441,6 +441,41 @@ Widget _addProductForm(
             border: OutlineInputBorder(),
           ),
         ),
+      ],
+    ),
+  );
+}
+
+Widget buildErrorRetry(VoidCallback onRetry) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.error_outline, size: 64, color: Colors.redAccent),
+        const SizedBox(height: 8),
+        const Text(
+          "Something went wrong",
+          style: TextStyle(color: Colors.white),
+        ),
+        const SizedBox(height: 12),
+        ElevatedButton.icon(
+          onPressed: onRetry,
+          icon: const Icon(Icons.refresh),
+          label: const Text("Retry"),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget buildNoData(String message) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.inbox, size: 64, color: Colors.grey),
+        const SizedBox(height: 12),
+        Text(message, style: const TextStyle(color: Colors.white54)),
       ],
     ),
   );

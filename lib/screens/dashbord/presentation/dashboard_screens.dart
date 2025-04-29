@@ -9,6 +9,7 @@ import 'package:awee/screens/dashbord/presentation/bloc/dashboard_event.dart';
 import 'package:awee/screens/dashbord/presentation/bloc/dhashboard_state.dart';
 import 'package:awee/screens/sales/presentation/report_screen.dart';
 import 'package:awee/them/them.dart';
+import 'package:awee/wideget/screenSlide/screenSlide.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awee/screens/products/prodect_screen.dart';
 import 'package:awee/screens/comingson/comingSon.dart';
 import 'package:awee/screens/profile/profilr.dart';
+import 'package:shimmer/shimmer.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -62,17 +64,71 @@ class _DashboardScreenState extends State<DashboardScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              SwitchListTile(
-                value:
-                    Provider.of<ThemeProvider>(context).themeMode ==
-                    ThemeMode.dark,
-                title: const Text('Dark Mode'),
-                onChanged: (value) {
-                  Provider.of<ThemeProvider>(
-                    context,
-                    listen: false,
-                  ).toggleTheme(value);
-                },
+              // SwitchListTile(
+              //   value:
+              //       Provider.of<ThemeProvider>(context).themeMode ==
+              //       ThemeMode.dark,
+              //   title: const Text('Dark Mode'),
+              //   onChanged: (value) {
+              //     Provider.of<ThemeProvider>(
+              //       context,
+              //       listen: false,
+              //     ).toggleTheme(value);
+              //   },
+              // ),
+              Row(
+                children: [
+                  const Text(
+                    'Dashboard',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.notifications),
+                    onPressed: () {
+                      // Handle notification action
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.settings),
+                    onPressed: () {
+                      // Handle settings action
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.logout),
+                    onPressed: () {
+                      // Handle logout action
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ComingSoonScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Provider.of<ThemeProvider>(context).themeMode ==
+                              ThemeMode.dark
+                          ? Icons.dark_mode
+                          : Icons.light_mode,
+                    ),
+                    onPressed: () {
+                      final isDark =
+                          Provider.of<ThemeProvider>(
+                            context,
+                            listen: false,
+                          ).themeMode ==
+                          ThemeMode.dark;
+                      Provider.of<ThemeProvider>(
+                        context,
+                        listen: false,
+                      ).toggleTheme(!isDark);
+                    },
+                    tooltip: 'Toggle Theme',
+                  ),
+                ],
               ),
 
               const SizedBox(height: 20),
@@ -92,11 +148,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     title: "Products",
                     image: 'assets/products.png',
                     onTap: () {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const ProductScreen(),
+                      //   ),
+                      // );
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const ProductScreen(),
-                        ),
+                        slideRoute(const ProductScreen()),
                       );
                     },
                   ),
@@ -232,9 +292,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       BlocBuilder<DashboardBloc, DashboardState>(
                         builder: (context, state) {
                           if (state is DashboardLoading) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
+                            return Center(child: buildLoadingShimmer());
                           } else if (state is DashboardLoaded) {
                             /// refersh to the data from the API
                             return RefreshIndicator(
@@ -271,14 +329,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ],
                               ),
                             );
-                          } else if (state is DashboardLoading) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
                           } else if (state is DashboardError) {
-                            return Center(
-                              child: Text('Error: ${state.message}'),
-                            );
+                            return buildNoData("Failed to load Data.");
                           }
                           return const SizedBox();
                         },
@@ -441,4 +493,52 @@ class DashboardBarChart extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget profile(String name, String email) {
+  return Card(
+    elevation: 4,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    child: ListTile(
+      leading: const Icon(Icons.person),
+      title: Text(name),
+      subtitle: Text(email),
+      trailing: const Icon(Icons.arrow_forward_ios),
+    ),
+  );
+}
+
+Widget buildLoadingShimmer() {
+  return ListView.builder(
+    itemCount: 5,
+    itemBuilder: (_, __) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Shimmer.fromColors(
+          baseColor: Colors.grey[800]!,
+          highlightColor: Colors.grey[600]!,
+          child: Container(
+            height: 80,
+            decoration: BoxDecoration(
+              color: Colors.grey[800],
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Widget buildNoData(String message) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.inbox, size: 64, color: Colors.grey),
+        const SizedBox(height: 12),
+        Text(message, style: const TextStyle(color: Colors.white54)),
+      ],
+    ),
+  );
 }

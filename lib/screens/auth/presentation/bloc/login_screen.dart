@@ -6,6 +6,7 @@ import 'package:awee/screens/auth/presentation/bloc/auth_state.dart';
 import 'package:awee/screens/dashbord/dashbord_screen.dart';
 import 'package:awee/screens/dashbord/presentation/dashboard_screens.dart';
 import 'package:awee/them/them.dart';
+import 'package:awee/wideget/screenSlide/screenSlide.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -48,6 +49,25 @@ class _LoginScreenState extends State<LoginScreen> {
         _passwordController.text = prefs.getString('saved_password') ?? '';
         rememberMe = true;
       });
+    }
+
+    PageRouteBuilder _slideRoute(Widget page) {
+      return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => page,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          var tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(position: offsetAnimation, child: child);
+        },
+      );
     }
   }
 
@@ -115,10 +135,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ThemeMode.dark,
               title: const Text('Dark Mode'),
               onChanged: (value) {
-                Provider.of<ThemeProvider>(
+                Navigator.pushReplacement(
                   context,
-                  listen: false,
-                ).toggleTheme(value);
+                  slideRoute(const DashboardScreen()),
+                );
               },
             ),
           ],
@@ -136,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
               // );
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => const DashboardScreen()),
+                slideRoute(const DashboardScreen()),
               );
             } else if (state is AuthError) {
               ScaffoldMessenger.of(context).showSnackBar(
