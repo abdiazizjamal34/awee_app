@@ -50,25 +50,6 @@ class _LoginScreenState extends State<LoginScreen> {
         rememberMe = true;
       });
     }
-
-    PageRouteBuilder _slideRoute(Widget page) {
-      return PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => page,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(1.0, 0.0);
-          const end = Offset.zero;
-          const curve = Curves.easeInOut;
-
-          var tween = Tween(
-            begin: begin,
-            end: end,
-          ).chain(CurveTween(curve: curve));
-          var offsetAnimation = animation.drive(tween);
-
-          return SlideTransition(position: offsetAnimation, child: child);
-        },
-      );
-    }
   }
 
   void _saveCredentials() async {
@@ -126,23 +107,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocProvider(
       create: (_) => AuthBloc(LoginUseCase(AuthRepository())),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Login'),
-          actions: [
-            SwitchListTile(
-              value:
-                  Provider.of<ThemeProvider>(context).themeMode ==
-                  ThemeMode.dark,
-              title: const Text('Dark Mode'),
-              onChanged: (value) {
-                Navigator.pushReplacement(
-                  context,
-                  slideRoute(const DashboardScreen()),
-                );
-              },
-            ),
-          ],
-        ),
         body: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthAuthenticated) {

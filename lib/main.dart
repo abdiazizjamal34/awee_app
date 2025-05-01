@@ -59,7 +59,11 @@ class MyApp extends StatelessWidget {
   ThemeData _darkTheme() {
     return ThemeData(
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: const Color.fromARGB(255, 20, 35, 65),
+      scaffoldBackgroundColor: Color.lerp(
+        const Color.fromARGB(255, 20, 35, 65),
+        const Color.fromARGB(255, 30, 16, 32),
+        0.5,
+      ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Color.fromARGB(255, 112, 127, 156),
         titleTextStyle: TextStyle(
@@ -69,7 +73,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       cardTheme: CardTheme(
-        color: const Color.fromARGB(255, 30, 16, 32),
+        color: const Color.fromARGB(255, 98, 121, 172),
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
